@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>さんすうゲーム</title>
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+<!-- ===== SPLASH ===== -->
+<div id="splash" class="splash active">
+  <div class="splash-title">🧮</div>
+  <div class="splash-text">さんすうゲーム</div>
+</div>
+
+<!-- ===== AUTH SCREEN ===== -->
+<div id="authScreen" class="auth-screen">
+  <div class="auth-logo">🧮</div>
+  <h1 class="auth-title">さんすうゲーム</h1>
+
+  <!-- Tab buttons -->
+  <div class="tab-row">
+    <button class="tab-btn active" id="tabLogin"  onclick="switchTab('login')">ログイン</button>
+    <button class="tab-btn"        id="tabSignup" onclick="switchTab('signup')">あたらしくはじめる</button>
+  </div>
+
+  <!-- Login form -->
+  <div id="formLogin" class="form-box">
+    <label class="field-label">なまえ</label>
+    <input class="field-input" id="loginName" type="text" placeholder="なまえをいれてね" autocomplete="off">
+    <label class="field-label">パスワード（数字4けた）</label>
+    <div class="pin-row" id="loginPin"></div>
+    <div class="err-msg" id="loginErr"></div>
+    <button class="primary-btn" onclick="doLogin()">ログイン</button>
+  </div>
+
+  <!-- Signup form -->
+  <div id="formSignup" class="form-box" style="display:none">
+    <label class="field-label">なまえをきめてね</label>
+    <input class="field-input" id="signupName" type="text" placeholder="なまえ" autocomplete="off" maxlength="10">
+
+    <label class="field-label">パスワード（数字4けた）</label>
+    <div class="pin-row" id="signupPin"></div>
+
+    <label class="field-label">アイコンをえらんでね</label>
+    <div class="icon-preview" id="iconPreview">
+      <canvas id="previewCanvas" width="80" height="80"></canvas>
+    </div>
+    <div class="icon-grid" id="iconGrid"></div>
+
+    <div class="err-msg" id="signupErr"></div>
+    <button class="primary-btn" onclick="doSignup()">はじめる！</button>
+  </div>
+
+  <!-- Account list -->
+  <div class="account-list-wrap" id="accountListWrap">
+    <div class="account-list-title">アカウントをえらぶ</div>
+    <div class="account-list" id="accountList"></div>
+  </div>
+</div>
+
+<script src="js/db.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

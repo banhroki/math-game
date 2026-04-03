@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>さんすうゲーム</title>
+<link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+
+<!-- ===== HOME ===== -->
+<div id="sHome" class="screen active">
+  <!-- Header -->
+  <div class="home-header">
+    <div class="user-icon-wrap" id="userIconWrap">
+      <canvas id="userIconCanvas" width="64" height="64"></canvas>
+    </div>
+    <div class="user-info">
+      <div class="user-name" id="userName">なまえ</div>
+      <div class="user-seals">🎯 <span id="userSeals">0</span>まい</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">ログアウト</button>
+  </div>
+
+  <h1 class="home-title" id="homeTitle">さんすうゲーム</h1>
+
+  <!-- Settings row -->
+  <div class="settings-row">
+    <button class="theme-btn active" style="background:#87ceeb" onclick="setTheme('th-sky',this)"></button>
+    <button class="theme-btn" style="background:#2a1a4a" onclick="setTheme('th-night',this)"></button>
+    <button class="theme-btn" style="background:#66bb6a" onclick="setTheme('th-forest',this)"></button>
+    <button class="theme-btn" style="background:#f48fb1" onclick="setTheme('th-candy',this)"></button>
+    <button class="set-btn diff-btn active" onclick="setDiff('easy',this)"><span class="dlabel">かんたん</span></button>
+    <button class="set-btn diff-btn" onclick="setDiff('norm',this)"><span class="dlabel">ふつう</span></button>
+    <button class="set-btn diff-btn" onclick="setDiff('hard',this)"><span class="dlabel">むずかしい</span></button>
+    <button class="set-btn lang-btn active" onclick="setLang('ja',this)">日本語</button>
+    <button class="set-btn lang-btn" onclick="setLang('en',this)">EN</button>
+  </div>
+
+  <!-- Mode grid -->
+  <div class="mode-grid">
+    <button class="mode-btn m0" onclick="startMode(0)"><span class="icon">🔢</span><span class="mLabel">かずをかぞえよう</span></button>
+    <button class="mode-btn m1" onclick="startMode(1)"><span class="icon">➕</span><span class="mLabel">たしざん</span></button>
+    <button class="mode-btn m2" onclick="startMode(2)"><span class="icon">➖</span><span class="mLabel">ひきざん</span></button>
+    <button class="mode-btn m3" onclick="startMode(3)"><span class="icon">✖️</span><span class="mLabel">かけざん</span></button>
+    <button class="mode-btn m4" onclick="startMode(4)"><span class="icon">➗</span><span class="mLabel">わりざん</span></button>
+    <button class="mode-btn m5" onclick="startMode(5)"><span class="icon">🔵</span><span class="mLabel">おおきいかず</span></button>
+  </div>
+  <button class="seal-peek-btn" onclick="showSeal()">🎯 シールちょう (<span id="peekCount">0</span>/100)</button>
+</div>
+
+<!-- ===== GAME ===== -->
+<div id="sGame" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="mini-icon-wrap"><canvas id="miniIconCanvas" width="36" height="36"></canvas></div>
+    <div class="game-mode-title" id="modeTitle"></div>
+    <div class="score-box">⭐<span id="score">0</span></div>
+  </div>
+  <div class="timer-bar-wrap" id="timerWrap"><div class="timer-bar" id="timerBar"></div></div>
+
+  <div class="q-card">
+    <div class="q-text" id="qText"></div>
+    <div class="equation" id="qEq"></div>
+    <div id="visual"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+  <div class="answers" id="answers"></div>
+  <button class="next-btn" id="nextBtn" onclick="nextQ()">つぎへ ▶</button>
+</div>
+
+<!-- ===== RESULT ===== -->
+<div id="sResult" class="screen">
+  <div class="result-icon-wrap"><canvas id="resultIconCanvas" width="90" height="90"></canvas></div>
+  <div class="result-title" id="rTitle"></div>
+  <div class="result-score" id="rScore"></div>
+  <div class="seal-reward" id="rSeal"></div>
+  <div class="result-bars" id="rBars"></div>
+  <div class="result-btns">
+    <button class="r-btn retry" onclick="retryMode()">もういちど</button>
+    <button class="r-btn seals" onclick="showSeal()">🎯 シールをはる</button>
+    <button class="r-btn home" onclick="goHome()">🏠 ホーム</button>
+  </div>
+</div>
+
+<!-- ===== SEAL BOOK ===== -->
+<div id="sSeal" class="screen">
+  <div class="seal-top-bar">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="seal-title-text" id="sealTitle">🎯 シールちょう</div>
+    <div style="width:44px"></div>
+  </div>
+  <div class="seal-stats" id="sealTotal"></div>
+  <div class="seal-info" id="sealInfo">シールをえらんでマスをタップ！</div>
+  <div class="sticker-picker" id="stickerPicker"></div>
+  <div class="board-wrap">
+    <div class="board-grid" id="boardGrid"></div>
+  </div>
+</div>
+
+<!-- Prize popup -->
+<div class="prize-overlay" id="prizeOverlay">
+  <div class="prize-box">
+    <div class="prize-icon" id="prizeIcon"></div>
+    <div class="prize-title" id="prizeTitle"></div>
+    <div class="prize-desc"  id="prizeDesc"></div>
+    <button class="prize-close" onclick="closePrize()">やったー！</button>
+  </div>
+</div>
+
+<!-- Confetti -->
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<script src="js/db.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/seal.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
